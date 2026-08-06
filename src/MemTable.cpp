@@ -1,20 +1,20 @@
 #include "MemTable.hpp"
 
-std::optional<std::string_view> MemTable::get(std::string_view key)
+const lsmtse::Entry* lsmtse::MemTable::get(std::string_view key)
 {
     auto it{table_.find(key)};
     if(it != table_.end()) {
-        return it->second;
+        return &it->second;
     }
 
-    return std::nullopt;
+    return nullptr;
 }
 
-bool MemTable::del(std::string_view key)
+bool lsmtse::MemTable::del(std::string_view key)
 {
     auto it{table_.find(key)};
     if(it != table_.end()) {
-        if(!put(key, "DELETED")) {
+        if(!put(key, Entry{"", true})) {
             printf("deletion failed: table is full\n");
             return false;
         }

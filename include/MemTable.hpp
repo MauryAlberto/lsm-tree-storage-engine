@@ -4,31 +4,38 @@
 #include <optional>
 #include <string_view>
 
-class MemTable {
-    public:
-        MemTable(size_t maxEntries) : max_entries_(maxEntries) {}
+namespace lsmtse {
+    struct Entry {
+        std::string value;
+        bool is_tombstone = false;
+    };
 
-        template <typename K, typename V>
-        bool put(K&& key, V&& value) {
-            if(isTableFull()) return false;
+    class MemTable {
+        public:
+            MemTable(size_t maxEntries) : max_entries_(maxEntries) {}
 
-            auto [it, inserted] = table_.insert_or_assign(
-                typename decltype(table_)::key_type(std::forward<K>(key)),
-                typename decltype(table_)::mapped_type(std::forward<V>(value))
-            );
+            template <typename K, typename V>
+            bool put(K&& key, V&& value) {
+                if(isTableFull()) return false;
 
-            if(inserted) current_entries_++;
-            return true;
-        }
+                auto [it, inserted] = table_.insert_or_assign(
+                    typename decltype(table_)::key_type(std::forward<K>(key)),
+                    typename decltype(table_)::mapped_type(std::forward<V>(value))
+                );
 
-        std::optional<std::string_view> get(std::string_view key);
-        bool del(std::string_view key);
+                if(inserted) current_entries_++;
+                return true;
+            }
 
-        size_t currentEntries() { return current_entries_; }
-        bool isTableFull() const { return current_entries_ >= max_entries_; }
+            const Entry* get(std::string_view key);
+            bool del(std::string_view key);
 
-    private:
-        size_t max_entries_{0};
-        size_t current_entries_{0};
-        std::map<std::string, std::string, std::less<>> table_;
-};
+            size_t currentEntries() { return current_entries_; }
+            bool isTableFull() const { return current_entries_ >= max_entries_; }
+
+        private:
+            size_t max_entries_{0};
+            size_t current_entries_{0};
+            std::map<std::string, Entry, std::less<>> table_;
+    };
+}

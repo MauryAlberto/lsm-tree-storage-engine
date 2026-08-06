@@ -2,24 +2,24 @@
 #include "MemTable.hpp"
 
 TEST_CASE("put function inserts and assigns", "[MemTable]") {
-    MemTable table{10};
+    lsmtse::MemTable table{10};
     REQUIRE(table.put("apple", "1") == true);
 }
 
 TEST_CASE("get function retrieves value of existing key", "[MemTable]") {
-    MemTable table{10};
+    lsmtse::MemTable table{10};
     table.put("apple", "1");
-    REQUIRE(table.get("apple") == "1");
+    REQUIRE(table.get("apple")->value == "1");
 }
 
 TEST_CASE("del function places tombstone value for an existing key", "[MemTable]") {
-    MemTable table{10};
+    lsmtse::MemTable table{10};
     table.put("apple", "1");
     REQUIRE(table.del("apple") == true);
-    REQUIRE(table.get("apple") == "DELETED");
+    REQUIRE(table.get("apple")->is_tombstone == true);
 }
 
 TEST_CASE("get returns std::nullopt on non existing key", "[MemTable]") {
-    MemTable table{10};
-    REQUIRE(table.get("apple") == std::nullopt);
+    lsmtse::MemTable table{10};
+    REQUIRE(table.get("apple") == nullptr);
 }
