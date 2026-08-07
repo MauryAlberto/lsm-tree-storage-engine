@@ -6,7 +6,7 @@
 namespace lsmtse {
     struct Entry {
         std::string value;
-        bool is_tombstone = false;
+        bool isTombstone = false;
     };
 
     class MemTable {

@@ -25,6 +25,8 @@ namespace lsmtse {
         lsmtse::Entry entry;
     };
 
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Entry, value, isTombstone);
+
     class WriteAheadLog {
         public:
             explicit WriteAheadLog(std::filesystem::path filePath)

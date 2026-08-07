@@ -16,7 +16,7 @@ TEST_CASE("del function places tombstone value for an existing key", "[MemTable]
     lsmtse::MemTable table{10};
     table.put("apple", lsmtse::Entry{"1", false});
     REQUIRE(table.del("apple") == true);
-    REQUIRE(table.get("apple")->is_tombstone == true);
+    REQUIRE(table.get("apple")->isTombstone == true);
 }
 
 TEST_CASE("get returns std::nullopt on non existing key", "[MemTable]") {
