@@ -1,7 +1,6 @@
 #pragma once
 #include <map>
 #include <string>
-#include <optional>
 #include <string_view>
 
 namespace lsmtse {

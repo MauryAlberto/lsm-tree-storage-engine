@@ -45,12 +45,25 @@ FetchContent_Declare(
     GIT_TAG v3.7.1
     SYSTEM
 )
-FetchContent_MakeAvailable(Catch2)
+
+FetchContent_Declare(
+    json
+    URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz
+    SYSTEM
+)
+
+FetchContent_MakeAvailable(json Catch2)
 
 add_executable(unit_tests
     tests/Test_MemTable.cpp
 )
-target_link_libraries(unit_tests PRIVATE lsmtse_core Catch2::Catch2WithMain)
+
+target_link_libraries(lsmtse PRIVATE nlohmann_json::nlohmann_json)
+
+target_link_libraries(unit_tests PRIVATE 
+    lsmtse_core Catch2::Catch2WithMain
+    nlohmann_json::nlohmann_json 
+)
 target_compile_options(unit_tests PRIVATE ${LSMTSE_WARNING_FLAGS})
 
 include(CTest)
