@@ -16,14 +16,17 @@ namespace lsmtse {
 
             template <typename K, typename V>
             bool put(K&& key, V&& value) {
+                auto it{table_.lower_bound(key)};
+
+                if(it != table_.end() && !table_.key_comp()(key, it->first)) {
+                    it->second = std::forward<V>(value);
+                    return true;
+                }
+
                 if(isTableFull()) return false;
 
-                auto [it, inserted] = table_.insert_or_assign(
-                    typename decltype(table_)::key_type(std::forward<K>(key)),
-                    typename decltype(table_)::mapped_type(std::forward<V>(value))
-                );
-
-                if(inserted) current_entries_++;
+                table_.emplace_hint(it, std::forward<K>(key), std::forward<V>(value));
+                current_entries_++;
                 return true;
             }
 
@@ -31,7 +34,7 @@ namespace lsmtse {
             bool del(std::string_view key);
 
             size_t currentEntries() { return current_entries_; }
-            bool isTableFull() const { return current_entries_ >= max_entries_; }
+            bool isTableFull() const { return current_entries_ > max_entries_; }
 
         private:
             size_t max_entries_{0};
