@@ -1,9 +1,9 @@
 #pragma once
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/stat.h>
 #include <cstring>
 #include <cerrno>
+#include <iostream>
 #include <fstream>
 #include <filesystem>
 #include <cstdint>
@@ -14,7 +14,7 @@
 using json = nlohmann::json;
 
 namespace lsmtse {
-    enum class OP : std::uint8_t {
+    enum class OP {
         PUT,
         DELETE
     };
@@ -26,6 +26,10 @@ namespace lsmtse {
     };
 
     NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Entry, value, isTombstone);
+    NLOHMANN_JSON_SERIALIZE_ENUM(OP, {
+        {OP::PUT, "put"},
+        {OP::DELETE, "delete"}
+    });
 
     class WriteAheadLog {
         public:
@@ -40,8 +44,10 @@ namespace lsmtse {
             bool sync();
             bool clear();
             std::vector<WalRecord> recover();
+            size_t skippedRecordCount() { return skippedRecords_; }
         private:
             std::filesystem::path filePath_;
             std::ofstream file_;
+            size_t skippedRecords_{0};
     };
 }

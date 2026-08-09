@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <string_view>
+#include <iostream>
 
 namespace lsmtse {
     struct Entry {
