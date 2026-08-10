@@ -37,7 +37,7 @@ bool lsmtse::WriteAheadLog::sync()
     int savedError = errno;
     close(fd);
     if(status == -1) {
-        std::cerr << "WAL sync: fsync failed: " << strerror(errno) << "\n";
+        std::cerr << "WAL sync: fsync failed: " << strerror(savedError) << "\n";
         return false;
     }
 
@@ -62,6 +62,8 @@ bool lsmtse::WriteAheadLog::clear()
 
 std::vector<lsmtse::WalRecord> lsmtse::WriteAheadLog::recover()
 {
+    file_.flush();
+
     std::vector<lsmtse::WalRecord> records;
     
     std::ifstream in(filePath_, std::ios::binary);
@@ -76,7 +78,7 @@ std::vector<lsmtse::WalRecord> lsmtse::WriteAheadLog::recover()
         }
 
         try {
-            json j{json::parse(line)};
+            json j = json::parse(line);
             records.emplace_back(j["op"], j["key"], j["entry"]);
         } catch (json::exception& e) {
             std::cerr << "WAL recover: skipping corrupt record: " << e.what() << "\n";
