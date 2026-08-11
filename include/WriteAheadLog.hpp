@@ -38,7 +38,7 @@ namespace lsmtse {
                         if(!file_) {
                             throw std::runtime_error("failed to open WAL file: " + filePath_.string());
                         }
-                    };
+                    }
             bool appendPut(std::string key, Entry entry);
             bool appendDelete(std::string key);
             bool sync();
