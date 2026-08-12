@@ -25,7 +25,6 @@ namespace lsmtse {
         lsmtse::Entry entry;
     };
 
-    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Entry, value, isTombstone);
     NLOHMANN_JSON_SERIALIZE_ENUM(OP, {
         {OP::PUT, "put"},
         {OP::DELETE, "delete"}

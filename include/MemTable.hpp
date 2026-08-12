@@ -3,12 +3,15 @@
 #include <string>
 #include <string_view>
 #include <iostream>
+#include <nlohmann/json.hpp>
 
 namespace lsmtse {
     struct Entry {
         std::string value;
         bool isTombstone = false;
     };
+
+    NLOHMANN_DEFINE_TYPE_NON_INTRUSIVE(Entry, value, isTombstone);
 
     class MemTable {
         public:
