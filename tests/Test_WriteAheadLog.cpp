@@ -5,7 +5,7 @@
 using namespace lsmtse;
 
 namespace {
-    // keeps each test's WAL file separate and cleans up after itself.
+    // keeps each test's WAL file separate and cleans up after itself
     struct TempWalFile {
         std::filesystem::path path;
 
