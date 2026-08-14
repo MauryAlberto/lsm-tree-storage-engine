@@ -3,7 +3,7 @@
 #include <fstream>
 #include <vector>
 #include <nlohmann/json.hpp>
-#include "SSTable.hpp"
+#include "SSTableWriter.hpp"
 
 using namespace lsmtse;
 using json = nlohmann::json;

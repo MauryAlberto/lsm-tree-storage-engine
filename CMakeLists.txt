@@ -16,7 +16,8 @@ find_package(Threads REQUIRED)
 add_library(lsmtse_core
     src/MemTable.cpp
     src/WriteAheadLog.cpp
-    src/SSTable.cpp
+    src/SSTableWriter.cpp
+    src/SSTableReader.cpp
 )
 target_include_directories(lsmtse_core PUBLIC include)
 target_link_libraries(lsmtse_core PUBLIC Threads::Threads)
@@ -59,7 +60,7 @@ FetchContent_MakeAvailable(json Catch2)
 add_executable(unit_tests
     tests/Test_MemTable.cpp
     tests/Test_WriteAheadLog.cpp
-    tests/Test_SSTable.cpp
+    tests/Test_SSTableWriter.cpp
 )
 
 target_link_libraries(lsmtse PRIVATE nlohmann_json::nlohmann_json)

@@ -3,7 +3,7 @@
 #include <cstring>
 #include <cerrno>
 #include <nlohmann/json.hpp>
-#include "SSTable.hpp"
+#include "SSTableWriter.hpp"
 
 using json = nlohmann::json;
 
