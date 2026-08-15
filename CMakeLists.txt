@@ -61,6 +61,7 @@ add_executable(unit_tests
     tests/Test_MemTable.cpp
     tests/Test_WriteAheadLog.cpp
     tests/Test_SSTableWriter.cpp
+    tests/Test_SSTableReader.cpp
 )
 
 target_link_libraries(lsmtse PRIVATE nlohmann_json::nlohmann_json)
