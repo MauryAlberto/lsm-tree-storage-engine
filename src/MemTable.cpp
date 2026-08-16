@@ -12,16 +12,10 @@ const lsmtse::Entry* lsmtse::MemTable::get(std::string_view key)
 
 bool lsmtse::MemTable::del(std::string_view key)
 {
-    auto it{table_.find(key)};
-    if(it != table_.end()) {
-        if(!put(key, Entry{"", true})) {
-            std::cerr << "deletion failed: table is full\n";
-            return false;
-        }
-
-        return true;
+    if(!put(key, Entry{"", true})) {
+        std::cerr << "deletion failed: table is full\n";
+        return false;
     }
 
-    std::cerr << "deletion failed: key not found\n";
-    return false;
+    return true;
 }
