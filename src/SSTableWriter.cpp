@@ -7,35 +7,37 @@
 
 using json = nlohmann::json;
 
-bool lsmtse::SSTableWriter::write(const std::string &key, const Entry &entry)
-{
-    json j;
-    j["key"] = key;
-    j["entry"] = entry;
-    file_ << j.dump() << "\n";
-    return !file_.fail();
-}
-
-bool lsmtse::SSTableWriter::finish()
-{
-    file_.close();
-    if(file_.fail()) {
-        return false;
+namespace lsmtse {
+    bool lsmtse::SSTableWriter::write(const std::string &key, const Entry &entry)
+    {
+        json j;
+        j["key"] = key;
+        j["entry"] = entry;
+        file_ << j.dump() << "\n";
+        return !file_.fail();
     }
 
-    int fd = open(filePath_.c_str(), O_WRONLY);
-    if(fd == -1) {
-        std::cerr << "SSTable finish: open failed: " << strerror(errno) << "\n";
-        return false;
-    }
+    bool lsmtse::SSTableWriter::finish()
+    {
+        file_.close();
+        if(file_.fail()) {
+            return false;
+        }
 
-    int status = fsync(fd);
-    int savedError = errno;
-    close(fd);
-    if(status == -1) {
-        std::cerr << "SSTable finish: fsync failed: " << strerror(savedError) << "\n";
-        return false; 
-    }
+        int fd = open(filePath_.c_str(), O_WRONLY);
+        if(fd == -1) {
+            std::cerr << "SSTable finish: open failed: " << strerror(errno) << "\n";
+            return false;
+        }
 
-    return true;
+        int status = fsync(fd);
+        int savedError = errno;
+        close(fd);
+        if(status == -1) {
+            std::cerr << "SSTable finish: fsync failed: " << strerror(savedError) << "\n";
+            return false; 
+        }
+
+        return true;
+    }
 }
