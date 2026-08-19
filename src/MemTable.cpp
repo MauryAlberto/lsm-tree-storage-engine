@@ -1,7 +1,7 @@
 #include "MemTable.hpp"
 
 namespace lsmtse {
-    const Entry* lsmtse::MemTable::get(std::string_view key)
+    const Entry* MemTable::get(std::string_view key)
     {
         auto it{table_.find(key)};
         if(it != table_.end()) {
@@ -19,5 +19,11 @@ namespace lsmtse {
         }
 
         return true;
+    }
+
+    void MemTable::clear()
+    {
+        table_.clear();
+        currentEntries_ = 0;
     }
 }

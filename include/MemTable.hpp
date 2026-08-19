@@ -35,6 +35,7 @@ namespace lsmtse {
 
             const Entry* get(std::string_view key);
             bool del(std::string_view key);
+            void clear();
 
             size_t currentEntries() { return currentEntries_; }
             bool isTableFull() const { return currentEntries_ >= maxEntries_; }

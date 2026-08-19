@@ -15,11 +15,12 @@ namespace lsmtse {
             std::optional<std::string> get(const std::string& key);
             bool remove(const std::string& key);
         private:
-            void flush();
+            bool flush();
 
             std::filesystem::path dataDir_;
             WriteAheadLog wal_;
             MemTable memTable_;
             std::vector<std::filesystem::path> sstablePaths_;
+            size_t nextSSTableId_{0};
     };
 }
