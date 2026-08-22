@@ -3,6 +3,21 @@
 #include "SSTableWriter.hpp"
 
 namespace lsmtse {
+    bool StorageEngine::put(std::string key, std::string value)
+    {
+        if(memTable_.isTableFull()) {
+            if(!flush()) {
+                return false;
+            }
+        }
+
+        if(!wal_.appendPut(key, Entry{value, false})) {
+            return false;
+        }
+
+        return memTable_.put(std::move(key), Entry{std::move(value), false});
+    }
+
     std::optional<std::string> StorageEngine::get(const std::string &key)
     {
         const Entry* memEntry{memTable_.get(key)};    
@@ -27,6 +42,21 @@ namespace lsmtse {
         }
 
         return std::nullopt;
+    }
+
+    bool StorageEngine::remove(const std::string &key)
+    {
+        if(memTable_.isTableFull()) {
+            if(!flush()) {
+                return false;
+            }
+        }
+
+        if(!wal_.appendDelete(key)) {
+            return false;
+        }
+
+        return memTable_.del(key);
     }
 
     bool StorageEngine::flush()
