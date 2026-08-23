@@ -18,6 +18,7 @@ add_library(lsmtse_core
     src/WriteAheadLog.cpp
     src/SSTableWriter.cpp
     src/SSTableReader.cpp
+    src/StorageEngine.cpp
 )
 target_include_directories(lsmtse_core PUBLIC include)
 target_link_libraries(lsmtse_core PUBLIC Threads::Threads)
