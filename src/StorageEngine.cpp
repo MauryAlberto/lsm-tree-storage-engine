@@ -15,6 +15,10 @@ namespace lsmtse {
             return false;
         }
 
+        if(!wal_.sync()) {
+            return false;
+        }
+
         return memTable_.put(std::move(key), Entry{std::move(value), false});
     }
 
@@ -53,6 +57,10 @@ namespace lsmtse {
         }
 
         if(!wal_.appendDelete(key)) {
+            return false;
+        }
+
+        if(!wal_.sync()) {
             return false;
         }
 
